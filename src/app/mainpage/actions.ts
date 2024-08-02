@@ -43,6 +43,10 @@ export const deletePostAction = async (postId:string)=> {
     const post = await prisma.post.findUnique({where:{id:postId}})
 
     if(post?.userId !== user?.id) throw new Error("delete your own!")
+
+    await prisma.like.deleteMany({where:{postId:postId}})
+
+    await prisma.comment.deleteMany({where:{postId:postId}})
     
     await prisma.post.delete({where:{id:postId}})
 
